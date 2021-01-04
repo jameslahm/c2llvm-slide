@@ -1,0 +1,141 @@
+import { Text, Flex, Heading, Box,Link,Image } from 'rebass';
+import { CodeSurfer, CodeSurferColumns, Step } from 'code-surfer';
+import { nightOwl } from '@code-surfer/themes';
+import "prismjs/components/prism-antlr4"
+import "prismjs/components/prism-llvm"
+import ModuleFlow from './module.js'
+import Editor from './Editor'
+
+export const theme = nightOwl;
+
+
+# C To LLVM
+
+<Text color="gray" fontSize={4}>小组成员：王澳 张智</Text>
+
+---
+
+## 语法支持
+
+---
+
+- `include`头文件
+- 基础类型支持（包括`int`，`double`，`char`，`void`）
+- 函数声明定义
+- 结构体声明定义
+- 赋值语句
+- 变量定义语句（包括基础类型，数组，结构体等）
+- 条件语句（包括`if`，`else if`，`else`）
+- 循环语句（包括`for`，`while`）
+- 表达式（包括各种运算，变量及函数调用等）
+
+---
+
+## 模块划分
+
+---
+
+<ModuleFlow/>
+
+---
+
+
+
+## 词法分析 & 语法分析
+
+---
+
+<CodeSurferColumns theme={nightOwl} sizes={[1,2]}>
+
+<Step subtitle="使用Antlr自动构造">
+
+### Antlr Grammar File
+
+```g4 1:17 file=./src/c2llvm.g4
+```
+
+</Step>
+
+<Step subtitle="参考SpiderMonkey的AST结构">
+
+### Antlr Grammar File
+
+```g4 18:30 file=./src/c2llvm.g4
+```
+
+</Step>
+</CodeSurferColumns>
+
+---
+
+## 语义分析
+
+---
+
+- 使用`Visitor`遍历模式
+- 处理`Scope`作用域链
+- 处理局部变量和全局变量
+- 错误处理
+
+---
+
+## 中间代码生成
+
+---
+
+<CodeSurferColumns theme={nightOwl} sizes={[1,2]}>
+
+<Step subtitle="在语义分析同时进行代码生成">
+
+```c 5 file=./src/test.c
+```
+
+```llvm 14:15  file=./src/output.ll
+```
+
+</Step>
+
+<Step subtitle="使用llvmlite构造llvm中间表示">
+
+```c 6 file=./src/test.c
+```
+
+```llvm 16:17  file=./src/output.ll
+```
+
+</Step>
+
+<Step subtitle="使用llvmlite构造llvm中间表示">
+
+```c 1:8 file=./src/test.c live=true
+```
+
+```llvm 5:21 file=./src/output.ll
+```
+
+</Step>
+
+</CodeSurferColumns>
+
+---
+
+## 样例演示
+
+---
+
+<Editor/>
+
+---
+
+## 特点和难点
+
+---
+
+- 采用SpiderMonkey的AST结构，易于扩展
+- 语法支持丰富，包括结构体的使用等等
+- 生成LLVM中间表示代码，易于平台移植，效率高
+
+---
+
+## Thank you!
+
